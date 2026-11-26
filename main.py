@@ -54,6 +54,10 @@ def main() -> None:
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(TEXT)
+    # Read-back: guard against a partial write or an encoding
+    # surprise -- the file on disk must be byte-identical to TEXT.
+    with open(path, encoding="utf-8", newline="") as f:
+        assert f.read() == TEXT, "read-back mismatch"
 
 
 if __name__ == "__main__":
